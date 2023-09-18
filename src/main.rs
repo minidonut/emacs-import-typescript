@@ -1,13 +1,11 @@
 use find_up::find_up;
 use globset::Glob;
 use ignore::Walk;
-use serde_json::Value;
-use std::fs::File;
-use std::io::prelude::*;
-use std::path::Path;
+use package_json::read_package_json;
 use std::process;
 
 mod find_up;
+mod package_json;
 
 fn main() {
     let package_json_path = match find_up("package.json").unwrap() {
@@ -44,14 +42,4 @@ fn main() {
         "(message \"package.json path is {}\")",
         package_json_path.to_str().unwrap()
     );
-}
-
-fn read_package_json(path: &Path) -> Value {
-    let mut file = File::open(path).expect("Unable to open the file");
-    let mut contents = String::new();
-    file.read_to_string(&mut contents)
-        .expect("Unable to read the file");
-
-    let json_value: Value = serde_json::from_str(&contents).expect("Failed to parse JSON");
-    json_value
 }
