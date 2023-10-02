@@ -20,9 +20,13 @@ pub fn read_package_json(path: &Path) -> Value {
     json_value
 }
 
-pub fn get_dependencies<'a>(package_json: &'a Value, excludes: &[ExcludePattern]) -> Vec<&'a str> {
+pub fn get_dependencies<'a>(
+    key: &str,
+    package_json: &'a Value,
+    excludes: &[ExcludePattern],
+) -> Vec<&'a str> {
     package_json
-        .get("dependencies")
+        .get(key)
         .and_then(Value::as_object)
         .map(|deps| {
             deps.keys()
@@ -62,7 +66,7 @@ mod tests {
             ExcludePattern::Plain("typescript"),
             ExcludePattern::Regex(Regex::new(r"^@types/").unwrap()),
         ];
-        let mut deps = get_dependencies(&data, &excludes);
+        let mut deps = get_dependencies("dependencies", &data, &excludes);
         let mut expected = vec!["serde", "serde_json", "jest", "rocket"];
 
         deps.sort();
