@@ -46,7 +46,7 @@ fn get_project_files(project_path: &PathBuf) -> Vec<String> {
             diff_paths(entry.path(), &current_dir).map(|rel_path| {
                 let mut path_str = rel_path.display().to_string();
                 path_str = path_str
-                    .replace("\\", "/")
+                    .replace('\\', "/")
                     .replace("/index.ts", "")
                     .replace("/index.tsx", "");
 
@@ -57,7 +57,7 @@ fn get_project_files(project_path: &PathBuf) -> Vec<String> {
                     .to_string();
 
                 // Append "./" if the path_str does not start with "."
-                if !path_str.starts_with(".") {
+                if !path_str.starts_with('.') {
                     path_str = format!("./{}", path_str);
                 }
 
